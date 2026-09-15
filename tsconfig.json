@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "jsx": "preserve",
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": ["@slidev/types/client", "vite/client"]
+  },
+  "include": ["setup/**/*.ts", "components/**/*.vue", "layouts/**/*.vue", "**/*.d.ts"],
+  "exclude": ["node_modules", "dist"]
+}

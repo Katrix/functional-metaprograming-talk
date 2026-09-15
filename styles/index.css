@@ -1,0 +1,109 @@
+@font-face {
+  font-family: 'DejaVu Sans';
+  src: url('./fonts/DejaVuSans.ttf') format('truetype');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'DejaVu Sans';
+  src: url('./fonts/DejaVuSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: 'DejaVu Sans';
+  src: url('./fonts/DejaVuSans-Oblique.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'DejaVu Sans';
+  src: url('./fonts/DejaVuSans-BoldOblique.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+
+body {
+  --primary-dark: color-mix(in srgb, var(--slidev-theme-primary), black 10%);
+  --primary-darker: color-mix(in srgb, var(--slidev-theme-primary), black 30%);
+
+  --slidev-theme-code-word-highlight: #a9e7a9;
+}
+
+.breadcrumbs {
+  .band-1,
+  .band-2,
+  .band-3 {
+    color: white;
+    font-size: 0.75rem;
+    padding-left: 1rem;
+  }
+
+  .band-1 {
+    background-color: black;
+  }
+
+  .band-2 {
+    background-color: var(--primary-darker);
+  }
+
+  .band-3 {
+    background-color: var(--primary-dark);
+    padding-left: 2rem;
+  }
+}
+
+.slidev-layout {
+  --layout-px: 3.5rem;
+  padding-inline: var(--layout-px);
+}
+
+.slidev-layout.default, .slidev-layout.two-cols-header  {
+  padding-top: 0;
+
+  > h1:first-child {
+    margin-inline: calc(-1 * var(--layout-px));
+    padding-left: 1rem;
+    padding-block: 0.25rem;
+    background-color: var(--slidev-theme-primary);
+    color: white;
+    font-size: 2rem;
+  }
+
+  > h1:first-child + p {
+    opacity: 1;
+    margin-top: 0;
+  }
+}
+
+.slidev-layout.two-cols-header {
+  > h1:first-child {
+    grid-column: 1 / span 2;
+  }
+
+  > h1:first-child + p {
+    grid-column: 1 / span 2;
+  }
+}
+
+.slidev-layout.fact {
+  background-color: var(--slidev-theme-primary);
+  color: white;
+}
+
+.page-count {
+  position: absolute;
+  right: 1rem;
+  bottom: 0.5rem;
+}
+
+.highlighted-word {
+  border-radius: 0.25rem;
+  padding: 1px;
+  background-color: color-mix(in srgb, var(--slidev-theme-code-word-highlight), transparent 60%);
+  box-shadow:
+    0 0 1px color-mix(in srgb, var(--slidev-theme-code-word-highlight), transparent 30%),
+    inset 0 0 0 1px var(--slidev-theme-code-word-highlight),
+    inset 0 0 1px 2px color-mix(in srgb, var(--slidev-theme-code-word-highlight), transparent 20%);
+}
