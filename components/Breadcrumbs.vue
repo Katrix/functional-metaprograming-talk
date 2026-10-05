@@ -3,6 +3,7 @@
     <div class="band-1">{{ $slidev.configs.title }}</div>
     <div class="band-2">
       <span v-if="section">└─ {{ section }}</span>
+      <span v-else>&nbsp;</span>
     </div>
     <div class="band-3">
       <span v-if="subsection">└─ {{ subsection }}</span>

@@ -3,8 +3,9 @@
     <Breadcrumbs />
 
     <div class="slidev-layout two-cols-header w-full flex-1 min-h-0" :class="layoutClass">
-      <slot />
-
+      <div class="col-header">
+        <slot />
+      </div>
       <div class="col-left" :class="props.class">
         <slot name="left" />
       </div>
@@ -39,6 +40,10 @@ const props = defineProps({
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: auto 1fr auto;
+}
+
+.col-header {
+  grid-area: 1 / 1 / 2 / 3;
 }
 
 .col-left {

@@ -17,12 +17,12 @@ section: Code generation
 
 <!-- 
 How do you generate code? Well, there are many ways. You can generate the 
-individual bytecode, like we saw earlier. You can write ASTs, which are then 
-converted to code. Or, you can just write normal code. This normal code might 
-run at compile time, or at runtime.
+individual bytecode, like we saw earlier. You can write ASTs, which is then 
+converted into code. Or, you can just write normal code. This normal code 
+might run at compile time, or at runtime.
 
-When I saw normal code, I do mean that. Not scala.quoted, just code in a 
-context such that we call it code generation.
+When I say normal code, I do mean that. Not scala.quoted, just code in a 
+context such that we sometimes call it code generation.
 -->
 
 ---
@@ -31,17 +31,7 @@ subsection: Examples
 
 # Quoted
 
-```scala
-inline def timed[A](inline a: A): A = ${ timedImpl('a) }
-
-def timedImpl[A](a: Expr[A])(using Quotes): Expr[A] = '{
-  val before = System.currentTimeMillis()
-  val res = $a
-  val after = System.currentTimeMillis()
-  println(s"Time taken: ${after - before}ms")
-  res
-}
-```
+<<< @/snippets/timed/timedMacro.scala#code
 
 <!--
 Let's look at some examples. Now, we don't do much bytecode generation in 
@@ -56,14 +46,7 @@ AST category. We just get a nice way of instantiating this AST.
 
 # Inline
 
-```scala
-inline def timed[A](inline a: A): A = 
-  val before = System.currentTimeMillis()
-  val res = a
-  val after = System.currentTimeMillis()
-  println(s"Time taken: ${after - before}ms")
-  res
-```
+<<< @/snippets/timed/timedInline.scala#code
 
 <!-- 
 Next up we have Scala inline. Now we're in the normal code category, 
@@ -80,17 +63,10 @@ inline, we don't have as much freedom there.
 
 # By-name paramters
 
-```scala
-def timed[A](a: => A): A = 
-  val before = System.currentTimeMillis()
-  val res = a
-  val after = System.currentTimeMillis()
-  println(s"Time taken: ${after - before}ms")
-  res
-```
+<<< @/snippets/timed/timedByName.scala#code
 
 <!--
-Lastly, in the normal runtime code category, we have by-name parameters. 
+Then, in the normal runtime code category, we have by-name parameters. 
 
 While again less powerful than inline, we can do a lot with just by-name 
 paramters.
@@ -100,8 +76,24 @@ go too in depth in regard to them.
 -->
 
 ---
-returnTo: navigation
-setFlag: code-generation
+
+# IO
+
+<<< @/snippets/timed/timedIo.scala#code
+
+<!--
+Lastly, we have IO. This is again not that different from the code above. 
+Different syntax perhaps, but same logic.
+
+We are still taking in a bit of code, running some code around it, and 
+returning the result of running that bit of code.
+
+Somehow however, the last two examples somehow feel a bit less like 
+metaprogramming, at least to me? Why? Might it perhaps be because it feels
+so trivial? Many of us write similar code very often, but surely not we don't
+do metaprogramming that often?
+-->
+
 ---
 
 # Does code generation have to generate coded?
