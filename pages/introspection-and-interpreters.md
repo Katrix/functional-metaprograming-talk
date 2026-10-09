@@ -1,7 +1,14 @@
 ---
-layout: two-cols-header
+layout: center
 routeAlias: introspection-and-interpreters
-section: HOAS
+section: Introspection and interpreters
+---
+
+# Saving introspection in functional programming
+
+---
+layout: two-cols-header
+subsection: HOAS
 ---
 
 # HOAS (Higher-order Abstract Syntax)
@@ -55,7 +62,8 @@ def eval(expr: Expr): Expr = expr match
 </style>
 
 <!--
-This problem sadly goes quite deep, and often shows up in how we write code.
+The problem around `flatMap` goes quite deep, and flatMap is just a symptom
+of how we write functional programs.
 
 Here's a basic example of lambda calculus.
 
@@ -65,16 +73,13 @@ so messy in terms of code.
 We can also pretty print the tree instead of evaluating it.
 
 What we can do now instead is let Scala handle variable binding for us.
-From there, defining eval is not far easier.
+From there, defining eval is now far easier.
 
-Isn't the example on the right far easier to understand and read? Too mad it's
+Isn't the example on the right far easier to understand and read? Too bad it's
 far harder to analyze now. For example, how would you implement the pretty 
-function now?
+function now? This is kind of the same as `flatMap`.
 -->
 
----
-returnTo: navigation
-setFlag: introspection
 ---
 
 # Solutions?
@@ -92,14 +97,18 @@ The first option is to simple not do this. Scala's quoted macro system does this
 
 We can use something called Parametric Higher-order Abstract Syntax.
 
-Tagless final are also options sometimes.
+Tagless final is also options sometimes.
 
 Applicative algebras, essentially getting rid of `.flatMap` can be viable, 
-especially if you pair it with Selective functors to get back ifs.
+especially if you pair it with Selective functors to get back ifs. 
+Parser combinators are an example where most of, if not all the logic depending
+on your grammar can be done with applicative algebras instead.
 
 In the same vein, you can use Arrow types. Now, sadly it's been close to a 
 decade since the last Arrow effect runtime was still maintained, so in Scala
-this is not all that viable for effects.
+this is not all that viable for effects. fs2 is the closest we have to seeing 
+what code like that would look like, and demonstrates that flatMap is not 
+always needed to do everything.
 
 You can also just restrain the types more DataPrism and Slick allow flatMap,
 but the rest of the types are constrained enough where it's not a problem.
@@ -109,7 +118,7 @@ but the rest of the types are constrained enough where it's not a problem.
 section: Interpretation
 ---
 
-# Inerpretation as introspection
+# Interpretation as introspection
 ```scala {1-3|1-7|all}
 trait MakeExpr[A]:
   def lam(f: A => A): A

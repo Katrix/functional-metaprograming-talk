@@ -8,10 +8,11 @@ section: Code generation
 <v-clicks depth="2">
 
 * What is code?
-* How to generate code?
-  * Indiviaual bytecode
+* How to represent code?
+  * Individual bytecode
   * AST
   * Normal code
+  * Data?
 
 </v-clicks>
 
@@ -23,6 +24,9 @@ might run at compile time, or at runtime.
 
 When I say normal code, I do mean that. Not scala.quoted, just code in a 
 context such that we sometimes call it code generation.
+
+Lastly, we have data. Not data as in ASTs, just normal data which encode 
+behaviors.
 -->
 
 ---
@@ -61,7 +65,7 @@ inline, we don't have as much freedom there.
 
 ---
 
-# By-name paramters
+# By-name parameters
 
 <<< @/snippets/timed/timedByName.scala#code
 
@@ -69,7 +73,7 @@ inline, we don't have as much freedom there.
 Then, in the normal runtime code category, we have by-name parameters. 
 
 While again less powerful than inline, we can do a lot with just by-name 
-paramters.
+parameters.
 
 There are still more ways to do metaprogramming, like using Mirror, but I won't
 go too in depth in regard to them.
@@ -109,4 +113,135 @@ I would define as a prime example of code generation.
 
 If your answer is yes, then the definition of code generation is a pretty 
 generic term, which just refers to composing code in a metaprogramming context. 
+-->
+
+---
+subsection: Data as code
+layout: two-cols-header
+---
+
+# Data as code: List of instructions
+
+::left::
+
+```scala{all}
+def getScalar(json: Json): Decoder.Result[Int] =
+  json
+    .hcursor
+    .downField("test")
+    .downN(1)
+    .downField("inner")
+    .as[Int]
+```
+
+::right::
+
+```scala{hide|all}
+val location = Seq(
+  CursorOp.DownField("test"),
+  CursorOp.DownN(1),
+  CursorOp.DownField("inner"),
+)
+
+def getScalar(json: Json): Decoder.Result[Int] =
+  json.hcursor.replay(location).as[Int]
+```
+
+::bottom::
+
+```scala{hide|all}
+def deleteFields(toDelete: Seq[String]) = 
+  toDelete.flatMap:
+    field => Seq(
+      CursorOp.DownField(field), 
+      CursorOp.DeleteGoParent
+    )
+```
+
+<style>
+:deep(.two-cols-header) {
+  column-gap: 20px;
+}
+
+.slidev-code .line:not(.highlighted) { opacity: 0; }
+</style>
+
+<!--
+A good first example to code as data is a list of operations. Take circe's 
+CursorOp for example.
+
+We could dig deep into this JSON object this way. Or, we could put the instructions 
+for how to get there in a value, and use this value to get to our location.
+
+Maybe we want to consolidate these operations which are used in multiple 
+places. We could use a function to return a new cursor, or we could define
+the list of operations.
+
+Another example is if we want to more programmatically use the cursor. Say for
+example that we want to delete multiple fields from a JSON object. We could use
+a tail recursive function, or a fold on the list of fields to delete, but
+we could also just flatMap the list, producing a list of operations to perform.
+
+In essence, we are composing a bunch of small programs together, with list 
+concatenation.
+-->
+
+---
+layout: two-cols-header
+---
+
+# Data as code: Transformation matrices
+
+::left::
+
+```scala{all}
+def modifyVec(vec: Vector3): Vector3 = 
+  vec
+    .translate(x = 5, y = 10, z = -15)
+    .rotate(yaw = 20, pitch = 30)
+```
+
+::right::
+
+```scala{hide|all}
+val translateMat = 
+  Matrix4.ofTranslation(x = 5, y = 10, z = -15)
+val rotateMat = 
+  Matrix4.ofRotation(yaw = 20, pitch = 30)
+
+def modifyVec(vec: Vector3): Vector3 = 
+  translateMat * rotateMat * vec
+```
+
+::bottom::
+
+```scala{hide|1-2|1-5|all}
+def compose(mat1: Matrix4, mat2: Matrix4): Matrix4 = 
+  mat1 * mat2
+
+def run(mat: Matrix4, vec: Vector3): Vector3 = 
+  mat * vec
+
+def getTranslation(mat: Matrix4): Vector3 =
+  Vector3(translateMat.m03, translateMat.m13, translateMat.m23)
+```
+
+<style>
+:deep(.two-cols-header) {
+  column-gap: 20px;
+}
+
+.slidev-code .line:not(.highlighted) { opacity: 0; }
+</style>
+
+<!--
+I would say that in some cases, certain data can also be code. Normally, 
+data is just data. Sometimes however, it can encode behavior or instructions.
+
+Transformation matrices are an example of this. Now, we do have to do an extra
+preperation step where we create the matrices. After that, we can use them as
+many times we want, as small programs.
+
+Like many other programs, we can compose them, and run them. We can also analyze 
+them a bit to get back extra information encoded in them.
 -->

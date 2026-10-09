@@ -21,10 +21,7 @@ themeConfig:
 
 <!--
 Notes from talk practice:
-Make compilation and introspection chapters more approachable
-More guided journey
-
-Compare by-name parameters to IO?
+How to generate code? => How to represent code?
 
 -->
 
@@ -35,28 +32,33 @@ layout: fact
 # Please ask questions
 
 ---
-layout: center
 section: Intro
 ---
 
 # What is functional programming?
 
-<div v-click>
-Passing around lambdas everywhere
-</div>
+<v-clicks>
 
----
-layout: center
+* Passing around lambdas everywhere
+* Immutability, or referential transparency
+* A focus on data
+
+</v-clicks>
+
 ---
 
 # What is metaprogramming?
 
-<div v-click>
-Treating code as data
-</div>
+<v-clicks>
+
+* Deriving boilerplate for us
+* Code about code
+* Treating code as data
+
+</v-clicks>
 
 ---
-src: ./pages/1_basic-comparisions.md
+src: ./pages/1_basic-comparisons.md
 ---
 
 ---
@@ -64,7 +66,7 @@ src: ./pages/2_code-generation.md
 ---
 
 ---
-src: ./pages/3_compiletime.md
+src: ./pages/3_running-code.md
 ---
 
 ---
@@ -78,30 +80,57 @@ routeAlias: navigation
 
 # Navigation
 
-<div class="grid grid-cols-3 gap-6 justify-items-center mt-4">
+<div class="grid grid-cols-2 gap-6 justify-items-center align-items-center mt-4">
   <SlidePreview to="introspection-and-interpreters" :width="275" />
-  <SlidePreview to="typelevel-flatmap" :width="275" />
+  <SlidePreview to="compilation" :width="275" />
 </div>
 
 ---
 
 # Conclusion
 
-TODO
+<v-clicks>
+
+* Is metaprogramming just functional programming?
+* What is code? What is a program?
+* What is metaprogramming?
+* It's subjective
+
+</v-clicks>
+
+<!--
+
+So, we're here at the end. What did we find out? Is metaprogramming just 
+functional programming? Frankly, I don't know. I go back and forth on it.
+
+The answer to that question isn't really the point of this talk though. To me,
+the point is far more for you all to think about all these concepts we've gone
+over.
+
+We've seen many different forms code can take. In my opinion, the definition 
+of code is far wider than we generally think about. In that light, we can
+ask what metaprogramming is. If a transformation matrix is code, is
+generating that matrix sometimes metaprogramming? Is it a compilation step?
+
+Frankly I don't think we can work out one definitive answer. To me it's all
+subjective. Do however think more about these things on your own, and how
+they relate to what you normally do.
+
+-->
 
 ---
 routeAlias: end
-layout: end
+layout: center
 ---
 
-# That's all we have time for
+# How many here have done metaprogramming before?
 
 ---
 src: ./pages/introspection-and-interpreters.md
 ---
 
 ---
-src: ./pages/typelevel-flatmap.md
+src: ./pages/compiletime.md
 ---
 
 ---

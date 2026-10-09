@@ -15,14 +15,16 @@ values into a list (shown as just toListK here), and hand them to Json.obj
 -->
 
 ---
+zoom: 0.9
+---
 
 # Why are they different?
 
-<<< @/snippets/EventListenerFactory.java {maxHeight:'445px'}
+<<< @/snippets/EventListenerFactory.java {maxHeight:'475px'}
 
 <!--
 However, not all metaprogramming is that nice. This is a file from the 
-Neoforged project, which generates a new anonomyous class for an event 
+Neoforged project, which generates a new anonymous class for an event 
 listener at runtime. How it does this is for performance reasons, and it does
 perform quite well. 
 
