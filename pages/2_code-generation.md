@@ -1,9 +1,12 @@
 ---
 routeAlias: code-generation
 section: Code generation
+layout: two-cols-header
 ---
 
 # Code generation
+
+::left::
 
 <v-clicks depth="2">
 
@@ -15,6 +18,14 @@ section: Code generation
   * Data?
 
 </v-clicks>
+
+::right::
+
+<style>
+:deep(.two-cols-header) {
+  column-gap: 20px;
+}
+</style>
 
 <!-- 
 How do you generate code? Well, there are many ways. You can generate the 
@@ -33,15 +44,39 @@ behaviors.
 subsection: Examples
 ---
 
+# Bytecode
+
+```java
+ 0: invokestatic  #40     // Method java/lang/System.currentTimeMillis:()J
+ 3: lstore_2
+ 4: aload_1
+ 5: invokeinterface #45,  // InterfaceMethod scala/Function0.apply:()Ljava/lang/Object;
+10: astore        4
+12: invokestatic  #40     // Method java/lang/System.currentTimeMillis:()J
+15: lstore        5
+17: getstatic     #50     // Field scala/Predef$.MODULE$:Lscala/Predef$;
+20: lload         5
+22: lload_2
+23: lsub
+24: invokedynamic #62,  0 // InvokeDynamic #0:makeConcatWithConstants:(J)Ljava/lang/String;
+29: invokevirtual #66     // Method scala/Predef$.println:(Ljava/lang/Object;)V
+32: aload         4
+34: areturn
+```
+
+<!--
+Let's look at some examples. First, we could generate the bytecode manually,
+like the Neoforged code we saw earlier. We don't do this much in the Scala community.
+-->
+
+---
+
 # Quoted
 
 <<< @/snippets/timed/timedMacro.scala#code
 
 <!--
-Let's look at some examples. Now, we don't do much bytecode generation in 
-Scala, so I'll skip that one.
-
-First up we have scala.quoted. This is probably the first thing people think
+Next we have scala.quoted. This is probably the first thing people think
 of when they think of code generation. I would personally lump this into the 
 AST category. We just get a nice way of instantiating this AST.
 -->
@@ -102,7 +137,7 @@ do metaprogramming that often?
 
 # Does code generation have to generate coded?
 
-<<< @/snippets/deriveEncoder.scala#code-highlighted
+<<< @/snippets/deriveEncoder.scala#code scala {all} /inline/
 
 <!-- 
 So simple question. If I remove the inline keyword in this code, is it still 
@@ -201,8 +236,6 @@ def modifyVec(vec: Vector3): Vector3 =
     .rotate(yaw = 20, pitch = 30)
 ```
 
-::right::
-
 ```scala{hide|all}
 val translateMat = 
   Matrix4.ofTranslation(x = 5, y = 10, z = -15)
@@ -211,6 +244,24 @@ val rotateMat =
 
 def modifyVec(vec: Vector3): Vector3 = 
   translateMat * rotateMat * vec
+```
+
+::right::
+
+```scala{hide|all}
+val translateMat = Matrix4(
+  1.0, 0.0,    0.0, 0.0,
+  0.0, 1.0,    0.0, 0.0,
+  0.0, 0.0,    1.0, 0.0,
+  5.0, 10.0, -15.0, 1.0
+)
+
+val rotateMat = Matrix4(
+  0.9396926,  0.0,      -0.34202012, 0.0,
+  0.17101006, 0.8660254, 0.4698463,  0.0,
+  0.2961981, -0.5,       0.81379765, 0.0,
+  0.0,        0.0,       0.0,        1.0
+)
 ```
 
 ::bottom::

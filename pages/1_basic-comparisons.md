@@ -1,6 +1,6 @@
 # Why are they similar?
 
-<<< @/snippets/deriveEncoder.scala#code
+<<< @/snippets/deriveEncoder.scala#code scala {all} /map2Const/ /toListK/
 
 <!--
 Here's an example of metaprogramming in Scala.

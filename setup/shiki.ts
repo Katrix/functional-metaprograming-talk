@@ -1,5 +1,5 @@
 import { defineShikiSetup } from '@slidev/types'
-import {transformerNotationWordHighlight} from "@shikijs/transformers";
+import {transformerMetaWordHighlight, transformerNotationWordHighlight} from "@shikijs/transformers";
 
 export default defineShikiSetup(() => {
   return {
@@ -7,6 +7,6 @@ export default defineShikiSetup(() => {
       dark: 'github-dark',
       light: 'github-light',
     },
-    transformers: [transformerNotationWordHighlight()],
+    transformers: [transformerNotationWordHighlight(), transformerMetaWordHighlight()],
   }
 })

@@ -115,8 +115,6 @@ but the rest of the types are constrained enough where it's not a problem.
 -->
 
 ---
-section: Interpretation
----
 
 # Interpretation as introspection
 ```scala {1-3|1-7|all}

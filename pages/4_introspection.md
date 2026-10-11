@@ -185,15 +185,12 @@ layout: center
 # Is introspection a dividing line?
 
 <!--
-Could you write an function which takes an Cats effect IO program, and produces 
-a String, or an IO[String], converting the IO to Lua, like Scalua did?
+Sadly, functional programming as typically written utterly fails at 
+introspection.
 
-Sadly, functional programming as typically written utterly fails at anything like 
-this.
-
-Functional programming can do quite well here, but there's just a small 
-function which doesn't interact well with introspection, and it just so happens
-that we love to use that function.
+Functional programming can do quite well here in certain cases, but there's 
+just a small function which doesn't interact well with introspection, and it 
+just so happens that we love to use that function.
 
 Anyone got a guess what the function is?
 -->
@@ -207,7 +204,7 @@ layout: center
 <div v-click>
 
 ```scala
-externsion [F[_], A] (fa: F[A]) def flatMap[B](f: A => F[B]): F[B]
+extension [F[_], A] (fa: F[A]) def flatMap[B](f: A => F[B]): F[B]
 ```
 
 </div>
@@ -221,29 +218,60 @@ Let's look at another example.
 -->
 
 ---
+layout: two-cols-header
+---
 
-# IO with cost
+# Optimize view
 
-```scala{1,8-10|1,8-13|1,8-16|1-3,8-16|all}
-class CostIO[A] private (val cost: Int, fa: IO[A]): 
-  def map[B](f: A => B): CostIO[B] = 
-    new CostIO(cost, fa.map(f))
+::left::
+
+```scala{1-8|1-10,18,19,21,22|1-10,18,19,21,22|1-15,18-22|all}{at:1}
+enum View[A]:
+  case FromSeq(seq: Seq[A])
+  case Concat(v1: View[A], v2: View[A])
+  case Map[B, C](v: View[A], f: A => B) extends View[B] 
+  case FlatMap[B, C](v: View[A], f: A => B) extends View[B]
   
-  def map2[B, C](fb: CostIO[B])(f: (A, B) => C): CostIO[C] = 
-    new CostIO(cost + fb.cost, fa.map2(fb.fa)(f))
-    
-object CostIO:
-  def pure[A](io: A): CostIO[A] = 
-    new CostIO(0, io)
+  def map[B](f: A => B): View[B] = Map(this, f)
+  def flatMap[B](f: A => View[B]) = FlatMap(this, f)
+  
+  private def foreach(f: A => Unit): Unit = ...
+  
+  def length: Int = this match
+    case FromSeq(seq)   => seq.length
+    case Concat(v1, v2) => v1.length + v2.length
+    case Map(v, _)      => v.length
+    case FlatMap(v, f)  => ???
 
-  def delay[A](a: => A): CostIO[A] = 
-    new CostIO(1, IO.delay(a))
-    
-  def blocking[A](a: => A): CostIO[A] =
-    new CostIO(5, IO.blocking(a))
+  def toVector: Vector[A] =
+    val builder = Vector.builder[A]()
+    builder.sizeHint(this.length)
+    this.foreach(e => builder += e)
+    builder.result()
+```
+
+::right::
+
+```scala{hide|hide|all}{at:1}
+def tabulate(i: Int)(f: Int => Int): View[Int] =
+  View.FromSeq(Seq.tabulate(i)(f))
+
+val view = for
+  v1 <- tabulate(10)(identity)
+  v2 <- tabulate(10)(v => v * v1)
+  v3 <- tabulate(100)(v => v * v2)
+  v4 <- tabulate(100)(v => v * v3)
+  v5 <- tabulate(1000)(v => v * v4)
+yield v5
+
+view.toVector
 ```
 
 <style>
+:deep(.two-cols-header) {
+  column-gap: 20px;
+}
+
 .slidev-code .line:not(.highlighted) { opacity: 0; }
 </style>
 

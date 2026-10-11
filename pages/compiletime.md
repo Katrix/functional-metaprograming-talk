@@ -19,14 +19,15 @@ subsection: Layers of execution
 
 # Layers of execution: Normal
 
-* gcc compiles: java
-* Java runs: scalac
-  * scalac runs: typechecking
-    * **My type level computation** (This is my compiletime)
-  * scalac runs: macros
-    * **My macros** (This is also my compiletime)
-* Java runs: My app
-  * **My app** (This is my runtime)
+* <span v-click="9">gcc compiles: java</span>
+* <span v-click="8">Java runs: scalac</span>
+  * <span v-click="3">scalac compiles: My app</span>
+    * <span v-click="4">scalac runs: typechecking</span>
+      * <span v-click="5">**My type level computation** (This is my compiletime)</span>
+    * <span v-click="6">scalac runs: macros</span>
+      * <span v-click="7">**My macros** (This is also my compiletime)</span>
+* <span v-click="2">Java runs: My app</span>
+  * <span v-click="1">**My app** (This is my runtime)</span>
 
 <!--
 I would say it is layers of execution we care about. Our PCs nowadays rarely
@@ -52,10 +53,11 @@ can occur.
 
 * gcc compiles: java
 * Java runs: scalac
-  * scalac runs: typechecking
-    * **My type level computation** (This is my compiletime)
-  * scalac runs: macros
-    * **My macros** (This is also my compiletime)
+  * scalac compiles: My app
+    * scalac runs: typechecking
+      * **My type level computation** (This is my compiletime)
+    * scalac runs: macros
+      * **My macros** (This is also my compiletime)
 * Java runs: Cats effect
   * Cats effect runs: My app
     * **My app** (This is my runtime)
@@ -73,9 +75,10 @@ not your runtime (unless you're a cats effect maintainer).
 
 * gcc compiles: java
 * Java runs: scalac
-  * scalac runs: typechecking
-    * typechecking runs: **Turing machine** (This is my runtime)
-      * turing machine runs: My incrementer
+  * scalac compiles: My app
+    * scalac runs: typechecking
+      * typechecking runs: **Turing machine** (This is my runtime)
+        * turing machine runs: My incrementer
 
 <!--
 For shits and giggles, 5 years I made a turing machine using Scala match types.

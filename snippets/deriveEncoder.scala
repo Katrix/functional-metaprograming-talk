@@ -5,8 +5,6 @@
 import io.circe.*
 import perspective.derivation.*
 
-//#region code-highlighted
-// [!code word:inline]
 //#region code
 inline def dervied[A](
   using gen: HKDProductGeneric[A], encoders: gen.Gen[Encoder]
@@ -23,4 +21,3 @@ inline def dervied[A](
 
     Json.obj(tupleList*)
 //#endregion code
-//#endregion code-highlighted
