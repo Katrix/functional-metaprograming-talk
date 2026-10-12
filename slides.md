@@ -35,6 +35,20 @@ layout: fact
 section: Intro
 ---
 
+# Who am I?
+
+* Kathryn, or Katrix
+* Work for Casehub A/S
+
+<br />
+
+* User of Shapeless 2
+  * Tried to port it to Scala 3
+* Made my own library for generic programming, perspective
+  * Also my master thesis
+
+---
+
 # What is functional programming?
 
 <v-clicks>
